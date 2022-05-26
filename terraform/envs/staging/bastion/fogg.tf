@@ -16,7 +16,7 @@ terraform {
 
     bucket         = "lisadaly"
     dynamodb_table = "lisadaly"
-    key            = "terraform/lisadaly/envs/staging/components/vpc.tfstate"
+    key            = "terraform/lisadaly/envs/staging/components/bastion.tfstate"
     encrypt        = true
     region         = "ap-southeast-1"
     profile        = "default"
@@ -97,7 +97,7 @@ variable "region" {
 }
 variable "component" {
   type    = string
-  default = "vpc"
+  default = "bastion"
 }
 variable "aws_profile" {
   type    = string
@@ -112,7 +112,7 @@ variable "tags" {
   default = {
     project   = "lisadaly"
     env       = "staging"
-    service   = "vpc"
+    service   = "bastion"
     owner     = "raymond@philippinedev.com"
     managedBy = "terraform"
   }
@@ -131,14 +131,14 @@ data "terraform_remote_state" "global" {
 
   }
 }
-data "terraform_remote_state" "bastion" {
+data "terraform_remote_state" "vpc" {
   backend = "s3"
   config = {
 
 
     bucket         = "lisadaly"
     dynamodb_table = "lisadaly"
-    key            = "terraform/lisadaly/envs/staging/components/bastion.tfstate"
+    key            = "terraform/lisadaly/envs/staging/components/vpc.tfstate"
     region         = "ap-southeast-1"
     profile        = "default"
 

@@ -20,5 +20,6 @@ envs:
     components:
       vpc:
         module_source: "github.com/scholzj/terraform-aws-vpc"
+      bastion: {}
 modules: {}
 version: 2

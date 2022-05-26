@@ -16,6 +16,9 @@ defaults:
   terraform_version: 0.13.5
 accounts: {}
 envs:
-  staging: {}
+  staging:
+    components:
+      vpc:
+        module_source: "github.com/scholzj/terraform-aws-vpc"
 modules: {}
 version: 2

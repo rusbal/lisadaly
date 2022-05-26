@@ -1,0 +1,17 @@
+defaults:
+  backend:
+    account_id: "561970534831"
+    bucket: lisadaly
+    dynamodb_table: lisadaly
+    profile: default
+    region: ap-southeast-1
+  owner: raymond@philippinedev.com
+  project: lisadaly
+  providers:
+    aws:
+      account_id: "561970534831"
+      profile: default
+      region: ap-southeast-1
+      version: 2.47.0
+  terraform_version: 0.13.5
+version: 2

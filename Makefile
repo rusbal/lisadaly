@@ -3,7 +3,7 @@
 
 include scripts/common.mk
 
-ENVS=
+ENVS=staging
 MODULES=
 ACCOUNTS=
 

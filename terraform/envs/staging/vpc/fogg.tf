@@ -124,7 +124,7 @@ data "terraform_remote_state" "global" {
 
     bucket         = "lisadaly"
     dynamodb_table = "lisadaly"
-    key            = "terraform/lisadaly/global.tfstate"
+    key            = "terraform/lisadaly/envs/staging/components/vpc.tfstate"
     region         = "ap-southeast-1"
     profile        = "default"
 

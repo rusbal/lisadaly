@@ -13,7 +13,7 @@ defaults:
       profile: default
       region: ap-southeast-1
       version: 2.47.0
-  terraform_version: 0.13.5
+  terraform_version: 1.0.0
 accounts: {}
 envs:
   staging:

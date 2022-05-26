@@ -7,7 +7,7 @@ locals {
   }
   vpc_cidr        = "10.0.0.0/16"
   vpc_name        = "Project VPC"
-  private_subnets = true
+  private_subnets = false
   aws_region      = "ap-southeast-1"
   aws_zones       = ["ap-southeast-1a", "ap-southeast-1b"]
 }

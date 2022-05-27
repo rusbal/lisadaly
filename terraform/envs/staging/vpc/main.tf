@@ -40,11 +40,13 @@ resource "aws_network_interface" "eni2" {
 resource "aws_eip" "eip1" {
   vpc               = true
   network_interface = aws_network_interface.eni1.id
+  tags              = local.tags
 }
 
 resource "aws_eip" "eip2" {
   vpc               = true
   network_interface = aws_network_interface.eni2.id
+  tags              = local.tags
 }
 
 resource "aws_nat_gateway" "nat1" {

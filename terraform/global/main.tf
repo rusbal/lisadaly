@@ -1,9 +1,9 @@
-terraform {
-  cloud {
-    organization = "philippinedev"
-
-    workspaces {
-      name = "lisadaly"
-    }
-  }
-}
+#terraform {
+#  cloud {
+#    organization = "philippinedev"
+#
+#    workspaces {
+#      name = "lisadaly"
+#    }
+#  }
+#}

@@ -7,3 +7,19 @@ resource "aws_key_pair" "ssh-key" {
   }
 }
 
+module "bastion" {
+  source  = "umotif-public/bastion/aws"
+  version = "~> 2.1.0"
+
+  name_prefix = "lisadaly"
+
+  vpc_id         = data.terraform_remote_state.vpc.outputs.vpc_id
+  public_subnets = data.terraform_remote_state.vpc.outputs.subnet_ids
+  region         = "ap-southeast-1"
+
+  ssh_key_name = aws_key_pair.ssh-key.key_name
+
+  tags = {
+    Name = "lisadaly"
+  }
+}

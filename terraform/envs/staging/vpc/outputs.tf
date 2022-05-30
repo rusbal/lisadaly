@@ -2,11 +2,11 @@
 # Make improvements in fogg, so that everyone can benefit.
 
 output "subnet_ids" {
-  value = module.terraform-aws-vpc.subnet_ids
+  value = module.myvpc.subnet_ids
 }
 
 output "vpc_id" {
-  value = module.terraform-aws-vpc.vpc_id
+  value = module.myvpc.vpc_id
 }
 
 output "private_web_subnets_id" {
@@ -29,3 +29,4 @@ output "private_db_subnets_id" {
     aws_subnet.subnet_db_2.id
   ]
 }
+

@@ -21,5 +21,7 @@ envs:
       vpc:
         module_source: "github.com/scholzj/terraform-aws-vpc"
       bastion: {}
+      database:
+        module_source: "github.com/rhythmictech/terraform-aws-rds-postgres"
 modules: {}
 version: 2

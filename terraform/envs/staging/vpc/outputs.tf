@@ -30,3 +30,6 @@ output "private_db_subnets_id" {
   ]
 }
 
+output "cidr_block" {
+  value = local.vpc_cidr
+}

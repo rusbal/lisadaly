@@ -35,7 +35,6 @@ resource "aws_security_group_rule" "intranet" {
   from_port = 0
   to_port   = 0
   type      = "egress"
-  #cidr_blocks       = [data.terraform_remote_state.vpc.local.vpc_cidr]
-  cidr_blocks       = ["0.0.0.0/0"]
+  cidr_blocks       = [data.terraform_remote_state.vpc.outputs.cidr_block]
   security_group_id = aws_security_group.bastion.id
 }

@@ -1,11 +1,21 @@
 resource "aws_route_table" "priv_rt_one" {
   vpc_id = module.myvpc.vpc_id
   tags = merge(local.tags, { Name = "Private RT1" })
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    nat_gateway_id = aws_nat_gateway.nat1.id
+  }
 }
 
 resource "aws_route_table" "priv_rt_two" {
   vpc_id = module.myvpc.vpc_id
   tags = merge(local.tags, { Name = "Private RT2" })
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    nat_gateway_id = aws_nat_gateway.nat2.id
+  }
 }
 
 resource "aws_route_table_association" "a1" {

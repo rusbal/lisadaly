@@ -1,7 +1,8 @@
 locals {
   raymond_key = "ssh-key"
-  tags        = {
-    Name = "lisa_daly"
+  project     = "lisadaly"
+  tags = {
+    Name = local.project
   }
 }
 
@@ -27,10 +28,30 @@ data "aws_ami" "ubuntu" {
   }
 }
 
-resource "aws_instance" "bastion" {
+resource "aws_network_interface" "foo" {
+  subnet_id       = data.terraform_remote_state.vpc.outputs.subnet_ids[0]
+  security_groups = [aws_security_group.bastion.id]
+
+  tags = {
+    Name = "primary_network_interface"
+  }
+}
+
+resource "aws_instance" "bastion_host" {
   ami           = data.aws_ami.ubuntu.id
   instance_type = "t2.nano"
   key_name      = local.raymond_key
+
+  network_interface {
+    network_interface_id = aws_network_interface.foo.id
+    device_index         = 0
+  }
+
+  user_data = <<EOF
+#!/bin/bash
+sudo apt update; sudo apt -y upgrade
+sudo apt install tree
+EOF
 
   tags = local.tags
 }

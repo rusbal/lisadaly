@@ -3,7 +3,7 @@
 
 locals {
   name = "raymond"
-  tags = {}
+  tags = { Name = "lisadaly-DB" }
 }
 
 module "terraform-aws-rds" {
@@ -29,12 +29,44 @@ module "terraform-aws-rds" {
   username = "postgres"
   port     = 5432
 
-  #db_subnet_group_name   = module.vpc.database_subnet_group
-  #vpc_security_group_ids = [module.security_group.security_group_id]
+  db_subnet_group_name   = aws_db_subnet_group.default.name
+  vpc_security_group_ids = [module.security_group.security_group_id]
 
   maintenance_window      = "Mon:00:00-Mon:03:00"
   backup_window           = "03:00-06:00"
   backup_retention_period = 0
 
   tags = local.tags
+}
+
+resource "aws_db_subnet_group" "default" {
+  name       = "db-subnet-group-name"
+  subnet_ids = data.terraform_remote_state.vpc.outputs.private_db_subnets_id
+  tags       = local.tags
+}
+
+module "security_group" {
+  source  = "terraform-aws-modules/security-group/aws"
+  version = "~> 4.0"
+
+  name        = local.name
+  description = "Complete PostgreSQL example security group"
+  vpc_id      = data.terraform_remote_state.vpc.outputs.vpc_id
+
+  # ingress
+  ingress_with_cidr_blocks = [
+    {
+      from_port   = 5432
+      to_port     = 5432
+      protocol    = "tcp"
+      description = "PostgreSQL access from within VPC"
+      cidr_blocks = data.aws_subnet.db_subnet.cidr_block
+    },
+  ]
+
+  tags = local.tags
+}
+
+data "aws_subnet" "db_subnet" {
+  id = data.terraform_remote_state.vpc.outputs.private_db_subnets_id[0]
 }

@@ -6,6 +6,23 @@ locals {
   tags = { Name = "lisadaly-DB" }
 }
 
+resource "aws_ssm_parameter" "foo" {
+  name  = "/lisadalydb/password"
+  type  = "SecureString"
+  value = module.terraform-aws-rds.db_instance_password
+}
+
+data "aws_instance" "bastion" {
+  filter {
+    name   = "ip-address"
+    values = [data.terraform_remote_state.bastion.outputs.bastion_ip_addr]
+  }
+}
+
+#output "bastion" {
+#  value = data.aws_instance.bastion
+#}
+
 module "terraform-aws-rds" {
   source = "github.com/terraform-aws-modules/terraform-aws-rds"
 
@@ -30,7 +47,11 @@ module "terraform-aws-rds" {
   port     = 5432
 
   db_subnet_group_name   = aws_db_subnet_group.default.name
-  vpc_security_group_ids = [module.security_group.security_group_id]
+  #vpc_security_group_ids = [module.security_group.security_group_id]
+  vpc_security_group_ids = concat(
+    [module.security_group.security_group_id],
+    tolist(data.aws_instance.bastion.vpc_security_group_ids)
+  )
 
   maintenance_window      = "Mon:00:00-Mon:03:00"
   backup_window           = "03:00-06:00"

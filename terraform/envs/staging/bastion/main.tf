@@ -39,7 +39,7 @@ resource "aws_network_interface" "foo" {
 
 resource "aws_instance" "bastion_host" {
   ami           = data.aws_ami.ubuntu.id
-  instance_type = "t2.nano"
+  instance_type = "t3.micro"
   key_name      = local.raymond_key
 
   network_interface {
@@ -50,7 +50,7 @@ resource "aws_instance" "bastion_host" {
   user_data = <<EOF
 #!/bin/bash
 sudo apt update; sudo apt -y upgrade
-sudo apt install tree
+sudo apt install tree postgresql-client-common
 EOF
 
   tags = local.tags

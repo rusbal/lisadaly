@@ -23,5 +23,7 @@ envs:
       bastion: {}
       database:
         module_source: "github.com/terraform-aws-modules/terraform-aws-rds"
+      dbproxy:
+        module_source: "github.com/terraform-aws-modules/terraform-aws-rds-proxy"
 modules: {}
 version: 2

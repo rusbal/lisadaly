@@ -16,7 +16,7 @@ terraform {
 
     bucket         = "lisadaly"
     dynamodb_table = "lisadaly"
-    key            = "terraform/lisadaly/envs/staging/components/vpc.tfstate"
+    key            = "terraform/lisadaly/envs/staging/components/dbproxy.tfstate"
     encrypt        = true
     region         = "ap-southeast-1"
     profile        = "default"
@@ -97,7 +97,7 @@ variable "region" {
 }
 variable "component" {
   type    = string
-  default = "vpc"
+  default = "dbproxy"
 }
 variable "aws_profile" {
   type    = string
@@ -112,7 +112,7 @@ variable "tags" {
   default = {
     project   = "lisadaly"
     env       = "staging"
-    service   = "vpc"
+    service   = "dbproxy"
     owner     = "raymond@philippinedev.com"
     managedBy = "terraform"
   }
@@ -159,14 +159,14 @@ data "terraform_remote_state" "database" {
 
   }
 }
-data "terraform_remote_state" "dbproxy" {
+data "terraform_remote_state" "vpc" {
   backend = "s3"
   config = {
 
 
     bucket         = "lisadaly"
     dynamodb_table = "lisadaly"
-    key            = "terraform/lisadaly/envs/staging/components/dbproxy.tfstate"
+    key            = "terraform/lisadaly/envs/staging/components/vpc.tfstate"
     region         = "ap-southeast-1"
     profile        = "default"
 

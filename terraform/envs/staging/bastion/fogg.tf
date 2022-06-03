@@ -145,6 +145,20 @@ data "terraform_remote_state" "database" {
 
   }
 }
+data "terraform_remote_state" "dbproxy" {
+  backend = "s3"
+  config = {
+
+
+    bucket         = "lisadaly"
+    dynamodb_table = "lisadaly"
+    key            = "terraform/lisadaly/envs/staging/components/dbproxy.tfstate"
+    region         = "ap-southeast-1"
+    profile        = "default"
+
+
+  }
+}
 data "terraform_remote_state" "vpc" {
   backend = "s3"
   config = {

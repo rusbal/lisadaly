@@ -3,45 +3,44 @@
 
 module "terraform-aws-rds-proxy" {
   source                         = "github.com/terraform-aws-modules/terraform-aws-rds-proxy"
-  auth_scheme                    = local.auth_scheme
-  connection_borrow_timeout      = local.connection_borrow_timeout
-  create_iam_policy              = local.create_iam_policy
-  create_iam_role                = local.create_iam_role
-  create_proxy                   = local.create_proxy
-  db_cluster_identifier          = local.db_cluster_identifier
-  db_instance_identifier         = local.db_instance_identifier
-  db_proxy_endpoints             = local.db_proxy_endpoints
-  debug_logging                  = local.debug_logging
-  engine_family                  = local.engine_family
-  iam_auth                       = local.iam_auth
-  iam_policy_name                = local.iam_policy_name
-  iam_role_description           = local.iam_role_description
-  iam_role_force_detach_policies = local.iam_role_force_detach_policies
-  iam_role_max_session_duration  = local.iam_role_max_session_duration
-  iam_role_name                  = local.iam_role_name
-  iam_role_path                  = local.iam_role_path
-  iam_role_permissions_boundary  = local.iam_role_permissions_boundary
-  iam_role_tags                  = local.iam_role_tags
-  idle_client_timeout            = local.idle_client_timeout
-  init_query                     = local.init_query
-  log_group_kms_key_id           = local.log_group_kms_key_id
-  log_group_retention_in_days    = local.log_group_retention_in_days
-  log_group_tags                 = local.log_group_tags
-  manage_log_group               = local.manage_log_group
-  max_connections_percent        = local.max_connections_percent
-  max_idle_connections_percent   = local.max_idle_connections_percent
-  name                           = local.name
-  proxy_tags                     = local.proxy_tags
-  require_tls                    = local.require_tls
-  role_arn                       = local.role_arn
-  secrets                        = local.secrets
-  session_pinning_filters        = local.session_pinning_filters
-  tags                           = local.tags
-  target_db_cluster              = local.target_db_cluster
-  target_db_instance             = local.target_db_instance
-  use_policy_name_prefix         = local.use_policy_name_prefix
-  use_role_name_prefix           = local.use_role_name_prefix
-  vpc_security_group_ids         = local.vpc_security_group_ids
-  vpc_subnet_ids                 = local.vpc_subnet_ids
 
+  create_proxy = true
+
+  name                   = local.name
+  iam_role_name          = local.name
+  vpc_subnet_ids         = module.vpc.private_subnets
+  vpc_security_group_ids = [module.rds_proxy_sg.security_group_id]
+
+  db_proxy_endpoints = {
+    read_write = {
+      name                   = "read-write-endpoint"
+      vpc_subnet_ids         = module.vpc.private_subnets
+      vpc_security_group_ids = [module.rds_proxy_sg.security_group_id]
+      tags                   = local.tags
+    },
+    read_only = {
+      name                   = "read-only-endpoint"
+      vpc_subnet_ids         = module.vpc.private_subnets
+      vpc_security_group_ids = [module.rds_proxy_sg.security_group_id]
+      target_role            = "READ_ONLY"
+      tags                   = local.tags
+    }
+  }
+
+  secrets = {
+    "${local.db_username}" = {
+      description = aws_secretsmanager_secret.superuser.description
+      arn         = aws_secretsmanager_secret.superuser.arn
+      kms_key_id  = aws_secretsmanager_secret.superuser.kms_key_id
+    }
+  }
+
+  engine_family = "POSTGRESQL"
+  debug_logging = true
+
+  # Target RDS instance
+  target_db_instance     = true
+  db_instance_identifier = module.rds.db_instance_id
+
+  tags = local.tags
 }
